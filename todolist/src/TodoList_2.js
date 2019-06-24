@@ -10,10 +10,9 @@ import {
 	getInputChangeAction,
 	getAddItemAction,
 	getDeleteItemAction,
-	initListAction
+	getTodoList
 } from './store/actionCreators'
 import TodoListUI from './TodoListUI';
-import axios from 'axios'
 
 class TodoList_2 extends Component {
 
@@ -75,13 +74,8 @@ class TodoList_2 extends Component {
 	}
 
 	componentDidMount() {
-		axios.get( 'https://www.easy-mock.com/mock/5d10eb44b674851c27217ece/example/list.json').then((res) => {
-			console.log(res)
-			const data = res.data.data;
-			const action = initListAction(data);
-			store.dispatch(action);
-			
-		})
+		const action = getTodoList();
+		store.dispatch(action)
 	}
 
 }

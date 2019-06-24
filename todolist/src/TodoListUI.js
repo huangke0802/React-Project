@@ -1,7 +1,5 @@
 /* UI组件负责渲染 */
-import React, {
-	Component
-} from 'react';
+import React from 'react';
 import {
 	Input,
 	Button,
@@ -24,7 +22,7 @@ const TodoListUI = (props) => {
 				size="small"
 				bordered
 				dataSource={ props.list }
-				renderItem={ (item, index) => (<List.Item onClick={ (index) => { props.handleItemDelete(index) } } >{ item }</List.Item>) }
+				renderItem={ (item, index) => (<List.Item onClick={ () => { props.handleItemDelete(index) } } >{ item }</List.Item>) }
 			/>
 		</div>
 	)

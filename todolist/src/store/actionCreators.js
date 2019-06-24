@@ -4,6 +4,9 @@ import {
   DELETE_TODO_ITEM,
   INIT_LIST_ACTION
 } from './actionTypes'
+
+import axios from 'axios';
+
 export const getInputChangeAction = (value) => ({
   type: CHANG_INPUT_VALUE,
   value,
@@ -22,3 +25,13 @@ export const initListAction = (data) => ({
   type: INIT_LIST_ACTION,
   data
 });
+
+export const getTodoList = () => {
+  return (dispatch) => {
+    axios.get('https://www.easy-mock.com/mock/5d10eb44b674851c27217ece/example/list.json').then((res) => {
+      const data = res.data.data;
+      const action = initListAction(data);
+      dispatch(action);
+    })
+  }
+}
