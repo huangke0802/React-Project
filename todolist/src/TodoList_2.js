@@ -3,10 +3,17 @@ import React, {
 } from 'react';
 
 import 'antd/dist/antd.css';
-import { Input, Button, List } from 'antd';
+
 import store from './store';
 // import { CHANG_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM } from './store/actionTypes';
-import { getInputChangeAction, getAddItemAction, getDeleteItemAction } from './store/actionCreators'
+import {
+	getInputChangeAction,
+	getAddItemAction,
+	getDeleteItemAction,
+	initListAction
+} from './store/actionCreators'
+import TodoListUI from './TodoListUI';
+import axios from 'axios'
 
 class TodoList_2 extends Component {
 
@@ -15,7 +22,7 @@ class TodoList_2 extends Component {
 		this.state = store.getState();
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleStoreChange = this.handleStoreChange.bind(this);
-
+		this.handleItemDelete = this.handleItemDelete.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		//这里绑定了随便的方法，这样就可以更新state中的数据
 		store.subscribe(this.handleStoreChange);
@@ -23,22 +30,13 @@ class TodoList_2 extends Component {
 
 	render() {
 		return (
-			<div style={ { width: "500px", margin: "0 auto" } }>
-				<div style={ { "textAlign": 'center' } }>
-					<Input placeholder="To do Something"
-						value={ this.state.inputValue }
-						style={ { width: "422px", margin: "10px auto" } }
-						onChange={ this.handleInputChange }
-					/>
-					<Button type="primary" style={ { marginLeft: '12px' } } onClick={ this.handleSubmit }>提交</Button>
-				</div>
-				<List
-					size="small"
-					bordered
-					dataSource={ this.state.list }
-					renderItem={ (item, index) => (<List.Item onClick={ this.handleItemDelete.bind(this, index) } >{ item }</List.Item>) }
-				/>
-			</div>
+			<TodoListUI
+				inputValue={ this.state.inputValue }
+				list={ this.state.list }
+				handleInputChange={ this.handleInputChange }
+				handleSubmit={ this.handleSubmit }
+				handleItemDelete={ this.handleItemDelete }
+			/>
 		)
 	}
 
@@ -74,6 +72,16 @@ class TodoList_2 extends Component {
 		// }
 		const action = getDeleteItemAction(index)
 		store.dispatch(action)
+	}
+
+	componentDidMount() {
+		axios.get( 'https://www.easy-mock.com/mock/5d10eb44b674851c27217ece/example/list.json').then((res) => {
+			console.log(res)
+			const data = res.data.data;
+			const action = initListAction(data);
+			store.dispatch(action);
+			
+		})
 	}
 
 }
