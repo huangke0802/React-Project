@@ -1,67 +1,83 @@
 import React, {
-	Component, Fragment
+	Component,
 } from 'react';
 
-import TodoItem from './TodoItem'
-import './todoList.css'
+import 'antd/dist/antd.css';
 
-class TodoList extends Component {
+import store from './store';
+// import { CHANG_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM } from './store/actionTypes';
+import {
+	getInputChangeAction,
+	getAddItemAction,
+	getDeleteItemAction,
+	getTodoList
+} from './store/actionCreators'
+import TodoListUI from './TodoListUI';
+
+class TodoList_2 extends Component {
+
 	constructor(props) {
 		super(props);
-		this.state = { 
-			list: [],
-			inputValue: ""
-		};
-
-		this.handleInputChange = this.handleInputChange.bind(this)
-		this.handleBtnClick = this.handleBtnClick.bind(this)
-		this.delete = this.delete.bind(this)
-	}
-
-	handleInputChange(e) {
-		this.setState({
-			inputValue: e.target.value
-		})
-	}
-
-	handleBtnClick() {
-		this.setState({
-			list: [...this.state.list, this.state.inputValue],
-			inputValue: ""
-		})
-	}
-
-	getItem() {
-		return (
-			this.state.list.map((item, idx) => {
-				return <TodoItem content={ item } key={ idx } index={ idx } delete={ this.delete } />
-			})
-		)
-	}
-
-	//React中父组件向子组件传参使用属性的方式；子组件通过this.props.xxx获取
-	//子组件如果想和父组件通讯，需要调用父组件传过来的方法
-
-	delete(index) {
-		const list = [...this.state.list];
-		list.splice(index, 1);
-		this.setState({
-			list
-		})
+		this.state = store.getState();
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleStoreChange = this.handleStoreChange.bind(this);
+		this.handleItemDelete = this.handleItemDelete.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		//这里绑定了随便的方法，这样就可以更新state中的数据
+		store.subscribe(this.handleStoreChange);
 	}
 
 	render() {
 		return (
-			//相当于vue中的template标签
-			<Fragment>
-				<div>
-					<input value={ this.state.inputValue } onChange={ this.handleInputChange } />
-					<button onClick={ this.handleBtnClick } className="btn"> add </button>
-				</div>
-				<ul>{ this.getItem() }</ul>
-			</Fragment>
-		);
+			<TodoListUI
+				inputValue={ this.state.inputValue }
+				list={ this.state.list }
+				handleInputChange={ this.handleInputChange }
+				handleSubmit={ this.handleSubmit }
+				handleItemDelete={ this.handleItemDelete }
+			/>
+		)
 	}
+
+	handleInputChange(e) {
+		// const action = {
+		// 	type: CHANG_INPUT_VALUE,
+		// 	value: e.target.value
+		// }
+
+		const action = getInputChangeAction(e.target.value);
+		store.dispatch(action);
+	}
+
+	handleStoreChange() {
+		//当我感知到store发生变化时，将store中的数据覆盖现在的state中的数据；
+		this.setState(store.getState());
+	}
+
+	handleSubmit() {
+		// const action = {
+		// 	type: ADD_TODO_ITEM,
+		// }
+
+		const action = getAddItemAction();
+
+		store.dispatch(action)
+	}
+
+	handleItemDelete(index) {
+		// const action = {
+		// 	type: DELETE_TODO_ITEM,
+		// 	index
+		// }
+		const action = getDeleteItemAction(index)
+		store.dispatch(action)
+	}
+
+	componentDidMount() {
+		const action = getTodoList();
+		store.dispatch(action)
+	}
+
 }
 
-export default TodoList;
+export default TodoList_2
