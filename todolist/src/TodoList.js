@@ -5,16 +5,17 @@ import React, {
 import 'antd/dist/antd.css';
 
 import store from './store';
-// import { CHANG_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM } from './store/actionTypes';
+// import axios from 'axios';
+
 import {
 	getInputChangeAction,
 	getAddItemAction,
 	getDeleteItemAction,
-	getTodoList
+	getInitList
 } from './store/actionCreators'
 import TodoListUI from './TodoListUI';
 
-class TodoList_2 extends Component {
+class TodoList extends Component {
 
 	constructor(props) {
 		super(props);
@@ -74,10 +75,15 @@ class TodoList_2 extends Component {
 	}
 
 	componentDidMount() {
-		const action = getTodoList();
-		store.dispatch(action)
+		const action = getInitList();
+		store.dispatch(action);
+		// axios.get('https://www.easy-mock.com/mock/5d10eb44b674851c27217ece/example/list.json').then((res) => {
+    //   const data = res.data.data;
+    //   const action = initListAction(data);
+		// 	store.dispatch(action)
+    // })
 	}
 
 }
 
-export default TodoList_2
+export default TodoList
