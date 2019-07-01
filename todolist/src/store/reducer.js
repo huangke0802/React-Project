@@ -1,5 +1,5 @@
 const defaultState = {
-  inputValue: 'hello world',
+  inputValue: '',
   list: []
 }
 
@@ -8,6 +8,18 @@ export default (state = defaultState, action) => {
   if ('change_input_value' === action.type) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.inputValue = action.value;
+    return newState;
+  }
+  if ('add_item' === action.type) {
+    const newState = JSON.parse(JSON.stringify(state));
+    newState.list.push(newState.inputValue);
+    newState.inputValue = "";
+    return newState;
+  }
+  if ('delete_item' === action.type) {
+    const newState = JSON.parse(JSON.stringify(state));
+    newState.list.splice(action.index, 1);
+    newState.inputValue = "";
     return newState;
   }
 
