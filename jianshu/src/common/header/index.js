@@ -2,11 +2,36 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import {
-	HeaderWrapper, Logo, Nav, NavItem, NavSearch, Addition, Button, SearchWrapper
+	HeaderWrapper, Logo, Nav, NavItem, NavSearch, Addition, Button, SearchWrapper, SearchInfo, SearchInfoTitle, SearchInfoSwitch, SearchInfoItem, SearchInfoList
 } from './style';
 
 import { CSSTransition } from 'react-transition-group';
 
+const getListArea = (show) => {
+	if (show) {
+		return (
+			<SearchInfo>
+				<SearchInfoTitle>
+					热门搜索
+							<SearchInfoSwitch>换一批</SearchInfoSwitch>
+				</SearchInfoTitle>
+				<SearchInfoList>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+				</SearchInfoList>
+			</SearchInfo>
+		)
+	} else {
+		return null;
+	}
+}
 
 const Header = (props) => (
 	<HeaderWrapper>
@@ -32,6 +57,9 @@ const Header = (props) => (
 				<i
 					className={ props.focused ? "focused iconfont" : "iconfont" }
 				>&#xe63d;</i>
+				{
+					getListArea(props.focused)
+				}
 			</SearchWrapper>
 		</Nav>
 		<Addition>
@@ -46,7 +74,8 @@ const Header = (props) => (
 
 const mapStateToProps = (state) => {
 	return {
-		focused: state.header.get('focused')
+		// focused: state.get('header').get('focused')
+		focused: state.getIn(['header', 'focused'])
 	}
 }
 
