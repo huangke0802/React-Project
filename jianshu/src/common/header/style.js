@@ -10,8 +10,7 @@ export const HeaderWrapper = styled.div `
 export const Logo = styled.a.attrs({
   href: '/'
 })
-`
-		position:absolute;
+`position:absolute;
 		top:0;
 		left:0;
 		display:block;
@@ -49,7 +48,7 @@ export const NavItem = styled.div `
 export const SearchWrapper = styled.div `
 		float :left;
 		position:relative;
-		.iconfont{
+		.zoom{
 			&.focused{
 				color:#fff;
 				background:#777;
@@ -118,6 +117,15 @@ color:#969696;
 export const SearchInfoSwitch = styled.div `
 float:right;
 font-size:13px;
+.spin{
+	display:block;
+	float:left
+		font-size:12px;
+		margin-right:2px;
+		transition:all .2s ease-in;
+		transform;rotate(0deg);
+		transform-origin:center center;
+}
 	`
 export const SearchInfoItem = styled.a `
 padding:0 5px;
